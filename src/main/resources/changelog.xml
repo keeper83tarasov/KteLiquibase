@@ -1,0 +1,133 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-database" author="alexander">
+
+        <createTable tableName="CLIENT">
+            <column name="ID" type="bigint" autoIncrement="true"/>
+            <column name="UUID" type="uuid"/>
+            <column name="DISCOUNT_FIRST" type="integer"/>
+            <column name="DISCOUNT_SECOND" type="integer"/>
+            <column name="NAME" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey tableName="CLIENT" columnNames="ID"/>
+
+        <addNotNullConstraint tableName="CLIENT" columnName="ID"/>
+        <addNotNullConstraint tableName="CLIENT" columnName="UUID"/>
+        <addNotNullConstraint tableName="CLIENT" columnName="DISCOUNT_FIRST"/>
+        <addNotNullConstraint tableName="CLIENT" columnName="DISCOUNT_SECOND"/>
+        <addNotNullConstraint tableName="CLIENT" columnName="NAME"/>
+
+        <createSequence sequenceName="SEQ_CLIENT"/>
+
+        <createIndex unique="true" tableName="CLIENT" indexName="CLIENT_UUID_IDX">
+            <column name="UUID"/>
+        </createIndex>
+
+        <createTable tableName="POSITION">
+            <column name="ID" type="bigint" autoIncrement="true"/>
+            <column name="DEFAULT_PRICE" type="bigint"/>
+            <column name="FINAL_DISCOUNT" type="integer"/>
+            <column name="FINAL_PRICE" type="bigint"/>
+            <column name="PRODUCT_ID" type="bigint"/>
+            <column name="QUANTITY" type="integer"/>
+            <column name="SALE_ID" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey tableName="POSITION" columnNames="ID"/>
+
+        <addNotNullConstraint tableName="POSITION" columnName="ID"/>
+        <addNotNullConstraint tableName="POSITION" columnName="DEFAULT_PRICE"/>
+        <addNotNullConstraint tableName="POSITION" columnName="FINAL_DISCOUNT"/>
+        <addNotNullConstraint tableName="POSITION" columnName="FINAL_PRICE"/>
+        <addNotNullConstraint tableName="POSITION" columnName="PRODUCT_ID"/>
+        <addNotNullConstraint tableName="POSITION" columnName="QUANTITY"/>
+        <addNotNullConstraint tableName="POSITION" columnName="SALE_ID"/>
+
+        <createSequence sequenceName="SEQ_POSITION"/>
+
+        <createTable tableName="PRODUCT">
+            <column name="ID" type="bigint" autoIncrement="true"/>
+            <column name="UUID" type="uuid"/>
+            <column name="DISCOUNT" type="integer"/>
+            <column name="NAME" type="varchar(255)"/>
+            <column name="NOTE" type="varchar(255)"/>
+            <column name="PRICE" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey tableName="PRODUCT" columnNames="ID"/>
+
+        <addNotNullConstraint tableName="PRODUCT" columnName="ID"/>
+        <addNotNullConstraint tableName="PRODUCT" columnName="UUID"/>
+        <addNotNullConstraint tableName="PRODUCT" columnName="DISCOUNT"/>
+        <addNotNullConstraint tableName="PRODUCT" columnName="NAME"/>
+        <addNotNullConstraint tableName="PRODUCT" columnName="NOTE"/>
+        <addNotNullConstraint tableName="PRODUCT" columnName="PRICE"/>
+
+        <createSequence sequenceName="SEQ_PRODUCT"/>
+
+        <createIndex unique="true" tableName="PRODUCT" indexName="PRODUCT_UUID_IDX">
+            <column name="UUID"/>
+        </createIndex>
+
+        <createTable tableName="RATING">
+            <column name="ID" type="bigint" autoIncrement="true"/>
+            <column name="CLIENT_ID" type="bigint"/>
+            <column name="RATING" type="integer"/>
+            <column name="PRODUCT_ID" type="bigint"/>
+        </createTable>
+
+        <addPrimaryKey tableName="RATING" columnNames="ID"/>
+
+        <addNotNullConstraint tableName="RATING" columnName="ID"/>
+        <addNotNullConstraint tableName="RATING" columnName="CLIENT_ID"/>
+        <addNotNullConstraint tableName="RATING" columnName="PRODUCT_ID"/>
+
+        <createSequence sequenceName="SEQ_RATING"/>
+
+        <createTable tableName="SALE">
+            <column name="ID" type="bigint" autoIncrement="true"/>
+            <column name="CHECK_NUMBER" type="varchar(255)"/>
+            <column name="CLIENT_ID" type="bigint"/>
+            <column name="SALE_DATE" type="date"/>
+        </createTable>
+
+        <addPrimaryKey tableName="SALE" columnNames="ID"/>
+
+        <addNotNullConstraint tableName="SALE" columnName="ID"/>
+        <addNotNullConstraint tableName="SALE" columnName="CHECK_NUMBER"/>
+        <addNotNullConstraint tableName="SALE" columnName="CLIENT_ID"/>
+        <addNotNullConstraint tableName="SALE" columnName="SALE_DATE"/>
+
+        <addForeignKeyConstraint baseTableName="POSITION" baseColumnNames="SALE_ID" constraintName="FK_POSITION_SALE"
+                                 referencedTableName="SALE"
+                                 referencedColumnNames="ID"/>
+
+        <addForeignKeyConstraint baseTableName="RATING" baseColumnNames="PRODUCT_ID" constraintName="FK_RATING_PRODUCT"
+                                 referencedTableName="PRODUCT"
+                                 referencedColumnNames="ID"/>
+
+        <sql>
+            insert into CLIENT (ID, UUID, DISCOUNT_FIRST, DISCOUNT_SECOND, NAME)
+            values (nextval('SEQ_CLIENT'), '7057279f-354c-45c1-983b-c4542613e5e8', '3', '5', 'Ivan');
+            insert into CLIENT (ID, UUID, DISCOUNT_FIRST, DISCOUNT_SECOND, NAME)
+            values (nextval('SEQ_CLIENT'), 'b0991c3b-3ae4-431b-836f-2a28f0f16979', '2', '8', 'Boris');
+            insert into CLIENT (ID, UUID, DISCOUNT_FIRST, DISCOUNT_SECOND, NAME)
+            values (nextval('SEQ_CLIENT'), '6d3f71bc-4fd8-4e37-887c-563a641fcb86', '4', '10', 'Marina');
+        </sql>
+
+        <sql>
+            insert into PRODUCT (ID, UUID, DISCOUNT, NAME, NOTE, PRICE)
+            values (nextval('SEQ_PRODUCT'), 'd5739692-d5ec-4fdb-bb1b-bfafb15fd269', '0', 'Ball Joint', 'TRW', '1200');
+            insert into PRODUCT (ID, UUID, DISCOUNT, NAME, NOTE, PRICE)
+            values (nextval('SEQ_PRODUCT'), 'f87dddaa-423e-47f0-8505-09db74cb7447', '0', 'Tie rod', 'CTR', '81250');
+            insert into PRODUCT (ID, UUID, DISCOUNT, NAME, NOTE, PRICE)
+            values (nextval('SEQ_PRODUCT'), '97f39f3a-5c9f-41d8-86cb-9fe1f94e7161', '0', 'Bearing', 'FAG', '14120');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
