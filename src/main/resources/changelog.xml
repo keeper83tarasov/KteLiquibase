@@ -130,4 +130,19 @@
         </sql>
     </changeSet>
 
+    <changeSet id="add-indexes-1" author="alexander">
+        <createIndex tableName="SALE" indexName="SALE_CLIENT_IDX">
+            <column name="CLIENT_ID"/>
+        </createIndex>
+        <createIndex tableName="POSITION" indexName="POS_PRODUCT_IDX">
+            <column name="PRODUCT_ID"/>
+        </createIndex>
+        <createIndex tableName="PRODUCT" indexName="PROD_DISCOUNT_IDX">
+            <column name="DISCOUNT"/>
+        </createIndex>
+        <createIndex tableName="SALE" indexName="SALE_DATE_IDX">
+            <column name="SALE_DATE"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
